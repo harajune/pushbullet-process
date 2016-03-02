@@ -1,0 +1,25 @@
+#!/bin/bash
+
+PROCESS_NAME=$1
+
+if [ $# -ne 3 ]; then
+    echo "usage: $0 push_bullet_token process_name message"
+    exit 1
+fi
+
+TOKEN=$1
+PROCESS=$2
+BODY=$3
+
+while :
+do
+    ALIVE=$(ps aux|grep $PROCESS|grep -v $0|wc -l)
+    
+    if [ $ALIVE -le 1 ]; then
+        break
+    fi
+done
+
+curl --header "Access-Token: $TOKEN" https://api.pushbullet.com/v2/pushes -d type=note -d title="$PROCESS killed" -d body="$BODY"
+
+exit 0
