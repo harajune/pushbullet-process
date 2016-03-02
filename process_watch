@@ -7,17 +7,19 @@ if [ $# -ne 3 ]; then
     exit 1
 fi
 
+
 TOKEN=$1
 PROCESS=$2
 BODY=$3
 
 while :
 do
-    ALIVE=$(ps aux|grep $PROCESS|grep -v $0|wc -l)
+    ALIVE=$(pgrep -f $PROCESS|grep -v $$|wc -l)
     
-    if [ $ALIVE -le 1 ]; then
+    if [ $ALIVE -lt 2 ]; then
         break
     fi
+    sleep 1
 done
 
 curl --header "Access-Token: $TOKEN" https://api.pushbullet.com/v2/pushes -d type=note -d title="$PROCESS killed" -d body="$BODY"
