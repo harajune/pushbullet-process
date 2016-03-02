@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PROCESS_NAME=$1
-
 if [ $# -ne 3 ]; then
     echo "usage: $0 push_bullet_token process_name message"
     exit 1
